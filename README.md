@@ -1,0 +1,12 @@
+# Reinforcement Learning used to construct automatically a portfolio between 3 assets
+
+* I used data from Bloomberg to calculate 3 datasets that had returns over different timeframes (Short-Term/MT/LT) of all typical asset classes (Equities, riskless and risky bonds, commodities, and the DXY so cash).
+I had a 4th dataset that contains Market data like the Vix and Move index, plus other Fundamental data like the P/E ratio.
+* For all datasets, I reduced the dimensionality using PCA, then took the 1st PC of each of them which accounts for the biggest variance in those datasets, and represent the risk-on/off movement in assets.
+* So i'm left with a dataset where each row/date is expressed in terms of values for the 1st PCs of each dataset. You can now plot in the y-axis the values that each 1st PC (of each dataset) takes along the original row indices (dates).
+* Once the original dataset is expressed in terms of (1st) PCs, those PCs are used to calculate other new dimensions, like the velocity/direction (1st derivative) and acceleration (2nd derivative) of their movements. I also used them to create new dimensions as their lagged values.
+* In that way, my new dataset wasn't only expressed in terms of their 1st PCs, but also contains information if those (PCs) values were coming from lower or higher previous values, plus the direction in which they were moving and if that movement was increasing or decreasing in speed.
+* Those all combined new dimensions are used in a custom OpenAI Gym environment, to make weights allocation to the 3 asset classes described, with the aim of maximizing the return of the resulting portfolio.
+* The results are positive as the majority of the time the algorithm decides to allocate a big positive or negative weight to equity to drive returns of the portfolio, and it is usually right given the returns of the assets, and therefore, of the portfolio.
+* To give an example, by the end of 2021, the algorithm decided to assign negative weights to all assets (Equities, riskless and risky bonds), and it pays off as in 2022 all of them lost value. Therefore, assigning negative weights to the 3 of them, multiplied by negative returns, provided a positive return at the portfolio level.
+* As another example, being possible to assign positive or negative weights to any of the 3 assets to distribute the total weights of the portfolio, from 2012 onwards, it decides to allocate 100% to Equities exclusively, benefiting from the big rally.
